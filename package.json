@@ -1,6 +1,6 @@
 {
   "name": "pino-sns-transport",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "simple transport to publish logs to sns topics",
   "main": "dist/index.js",
   "scripts": {
