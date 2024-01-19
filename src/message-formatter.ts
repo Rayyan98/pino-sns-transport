@@ -7,7 +7,10 @@ export class MessageFormatter {
 
   constructor(private readonly opts: SnsTransportOptions) {
     this.excludeKeys = new Set(opts.excludeKeys ?? []);
-    this.keyExamineDepth = opts.keyExamineDepth ?? 3;
+
+    const maxKeyParts = Math.max(...[...this.excludeKeys.values()].map((key) => key.split(".").length));
+
+    this.keyExamineDepth = Math.min(opts.keyExamineDepth ?? 3, maxKeyParts);
   }
 
   async init() {
@@ -33,7 +36,7 @@ export class MessageFormatter {
   };
 
   private removeKeysHelper(currentPath: string, message: any, depth: number) {
-    if (!this.isExaminableObject(message) && depth > this.keyExamineDepth) {
+    if (!this.isExaminableObject(message) || depth > this.keyExamineDepth) {
       return;
     }
 

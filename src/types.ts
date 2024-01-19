@@ -9,5 +9,9 @@ export type SnsTransportOptions = {
     maxWidth?: number;
   };
   excludeKeys?: string[];
+  excludeLogs?: {
+    key: string;
+    pattern: RegExp,
+  }[];
   keyExamineDepth?: number;
 }
