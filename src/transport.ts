@@ -8,7 +8,11 @@ export async function transport(opts: SnsTransportOptions) {
   const logFilterer = new LogFilterer(opts);
   const messageFormatter = new MessageFormatter(opts);
   const publisher = new Publisher(opts);
-  await messageFormatter.init();
+  
+  await Promise.all([
+    messageFormatter.init(),
+    publisher.init(),
+  ])
 
   return build(async function (source) {
     for await (let obj of source) {

@@ -76,7 +76,8 @@ export type LogFilter = {
 
 export type SnsTransportOptions = {
   snsClientConfig?: SNSClientConfig;
-  topicArn: string;
+  topic?: string;
+  topicArn?: string;
   beautify?: boolean;
   beautifyOptions?: {
     indentSize?: number;
@@ -91,7 +92,8 @@ export type SnsTransportOptions = {
 
 ### Description
 
-- `topicArn` is required and should the arn of the sns topic to publish logs to. It is passed to the publish method of the aws-sdk as is
+- `topic` is the name of the sns topic to publish logs to. When provided the full arn of the sns topic is constructed by getting the region and aws account id from the aws sns client. The full arn is then passed to the publish method of the aws-sdk to push logs
+- `topicArn` should be the arn of the sns topic to publish logs to. It is useful for scenarios where cross region or cross account logs need to be published. Either one of `topic` or `topicArn` must be provided. When both are provided `topicArn` is given preference
 - `snsClientConfig` is optional and anything passed to it is forwarded directly to the aws-sdk thus making the underlying aws-sdk client transparently configurable
 - `beautify` is true by default but will not take effect until the optional dependency [json-beautify](https://www.npmjs.com/package/json-beautify) is also installed, if you happen to have the dependency for unrelated reasons and don't want your logs to be formatted you can turn it off here
 - `beautifyOptions` are parameters passed to [json-beautify](https://www.npmjs.com/package/json-beautify) and don't take effect until `beautify` is true and the dependency is met

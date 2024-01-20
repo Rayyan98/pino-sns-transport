@@ -7,7 +7,8 @@ export type LogFilter = {
 
 export type SnsTransportOptions = {
   snsClientConfig?: SNSClientConfig;
-  topicArn: string;
+  topic?: string;
+  topicArn?: string;
   beautify?: boolean;
   beautifyOptions?: {
     indentSize?: number;
