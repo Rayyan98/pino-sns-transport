@@ -11,8 +11,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "as"
+    "url": "https://github.com/Rayyan98/pino-sns-transport"
   },
+  "bugs": {
+    "url": "https://github.com/Rayyan98/pino-sns-transport/issues"
+  },
+  "homepage": "https://github.com/Rayyan98/pino-sns-transport#readme",
   "author": "rayyan98",
   "license": "ISC",
   "dependencies": {
