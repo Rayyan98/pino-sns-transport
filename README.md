@@ -14,8 +14,12 @@ send logs to sns topics.
 <!-- TOC -->
 
 - [Installation](#installation)
-- [Usage](#usage)
+- [Quick Usage](#quick-usage)
 - [Configuration options](#configuration-options)
+  - [SnsTransportOptions](#snstransportoptions)
+  - [Description](#description)
+  - [Nuances](#nuances)
+  - [Example](#example)
 
 <!-- TOC END -->
 
@@ -23,7 +27,7 @@ send logs to sns topics.
 
 `npm install pino-sns-transport`
 
-## Usage
+## Quick Usage
 
 ```typescript
 import pino, { TransportTargetOptions } from 'pino';
@@ -46,10 +50,11 @@ const transport = pino.transport({
 const logger = pino(
   {
     /**
-     * Set this to trace or the minimum from the logging levels of the
-     * transports so that all logs are forwarded to transports, each
-     * transport carries its level and therefore can decide whether
-     * it wants to log or not
+     * Set this to trace or the minimum from the logging
+     * levels of the transports so that all logs are
+     * forwarded to transports, each transport carries its
+     * own level and therefore can decide whether it wants
+     * to log or not
      */
     level: 'trace',
   },
@@ -59,8 +64,15 @@ const logger = pino(
 
 ## Configuration options
 
+### SnsTransportOptions
+
 ```typescript
 import { SNSClientConfig } from "@aws-sdk/client-sns";
+
+export type LogFilter = {
+  key: string;
+  pattern: RegExp,
+}
 
 export type SnsTransportOptions = {
   snsClientConfig?: SNSClientConfig;
@@ -72,14 +84,12 @@ export type SnsTransportOptions = {
   };
   excludeKeys?: string[];
   keyExamineDepth?: number;
-  excludeLogs?: {
-    key: string;
-    pattern: RegExp,
-  }[];
+  includeLogs?: LogFilter[];
+  excludeLogs?: LogFilter[];
 }
 ```
 
-&nbsp;
+### Description
 
 - `topicArn` is required and should the arn of the sns topic to publish logs to. It is passed to the publish method of the aws-sdk as is
 - `snsClientConfig` is optional and anything passed to it is forwarded directly to the aws-sdk thus making the underlying aws-sdk client transparently configurable
@@ -87,9 +97,14 @@ export type SnsTransportOptions = {
 - `beautifyOptions` are parameters passed to [json-beautify](https://www.npmjs.com/package/json-beautify) and don't take effect until `beautify` is true and the dependency is met
 - `excludeKeys` can be used to delete keys from the json log before publish. Also supports dot notation for removing nested keys, see full example below
 - `keyExamineDepth` is the maximum depth level of json objects at which the keys will be examined for `excludeKeys`. The default value is 3.
+- `includeLogs` can be used to filter for logs that need to published and discard the rest. Providing an empty array here has the same effect as not providing a value which is that all logs will be published unless filtered out by `excludeLogs`. Unlike `excludeKeys`, this does not support dot notation for now
 - `excludeLogs` can be used to prevent certain logs from being published whose value at `key` matches the `pattern`. Unlike `excludeKeys`, this does not support dot notation for now
 
-&nbsp;
+### Nuances
+
+- If both `includeLogs` and `excludeLogs` are specified and a log matches both of them then it will be excluded.
+
+### Example
 
 ```typescript
 const transportTargets: TransportTargetOptions[] = [

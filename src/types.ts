@@ -1,5 +1,10 @@
 import { SNSClientConfig } from "@aws-sdk/client-sns";
 
+export type LogFilter = {
+  key: string;
+  pattern: RegExp,
+}
+
 export type SnsTransportOptions = {
   snsClientConfig?: SNSClientConfig;
   topicArn: string;
@@ -10,8 +15,6 @@ export type SnsTransportOptions = {
   };
   excludeKeys?: string[];
   keyExamineDepth?: number;
-  excludeLogs?: {
-    key: string;
-    pattern: RegExp,
-  }[];
+  includeLogs?: LogFilter[];
+  excludeLogs?: LogFilter[];
 }
