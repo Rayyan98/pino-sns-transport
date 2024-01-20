@@ -9,6 +9,12 @@
   "files": [
     "dist"
   ],
+  "keywords": [
+    "pino",
+    "transport",
+    "sns",
+    "typescript"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Rayyan98/pino-sns-transport"
