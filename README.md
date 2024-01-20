@@ -79,13 +79,17 @@ export type SnsTransportOptions = {
 }
 ```
 
-- `topicArn` is required and should the arn of the sns topic that to publish logs to. It is passed to the publish method of the aws-sdk as is
+&nbsp;
+
+- `topicArn` is required and should the arn of the sns topic to publish logs to. It is passed to the publish method of the aws-sdk as is
 - `snsClientConfig` is optional and anything passed to it is forwarded directly to the aws-sdk thus making the underlying aws-sdk client transparently configurable
 - `beautify` is true by default but will not take effect until the optional dependency [json-beautify](https://www.npmjs.com/package/json-beautify) is also installed, if you happen to have the dependency for unrelated reasons and don't want your logs to be formatted you can turn it off here
 - `beautifyOptions` are parameters passed to [json-beautify](https://www.npmjs.com/package/json-beautify) and don't take effect until `beautify` is true and the dependency is met
 - `excludeKeys` can be used to delete keys from the json log before publish. Also supports dot notation for removing nested keys, see full example below
 - `keyExamineDepth` is the maximum depth level of json objects at which the keys will be examined for `excludeKeys`. The default value is 3.
 - `excludeLogs` can be used to prevent certain logs from being published whose value at `key` matches the `pattern`. Unlike `excludeKeys`, this does not support dot notation for now
+
+&nbsp;
 
 ```typescript
 const transportTargets: TransportTargetOptions[] = [
