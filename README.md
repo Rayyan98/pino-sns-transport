@@ -37,7 +37,7 @@ const transportTargets: TransportTargetOptions[] = [
   {
     target: 'pino-sns-transport',
     options: {
-      topicArn: process.env.TOPIC_ARN,
+      topic: process.env.TOPIC,
     } as SnsTransportOptions,
     level: 'warn',
   },
