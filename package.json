@@ -4,7 +4,10 @@
   "description": "Simple transport to publish logs to sns topics",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "cleanup": "rm -rf dist",
+    "prerelease": "npm run cleanup && npm run build",
+    "release": "npm publish --access public"
   },
   "files": [
     "dist"
