@@ -1,7 +1,7 @@
 {
   "name": "pino-sns-transport",
   "version": "1.2.0",
-  "description": "simple transport to publish logs to sns topics",
+  "description": "Simple transport to publish logs to sns topics",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
@@ -29,10 +29,17 @@
     "pino-abstract-transport": "^1.1.0"
   },
   "peerDependencies": {
-    "@aws-sdk/client-sns": "^3.490.0"
+    "@aws-sdk/client-sns": "^3.0.0",
+    "pino": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "pino": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^14.18.63",
+    "sonic-boom": "^3.8.0",
     "typescript": "^5.3.3"
   },
   "optionalDependencies": {

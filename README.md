@@ -87,6 +87,7 @@ export type SnsTransportOptions = {
   keyExamineDepth?: number;
   includeLogs?: LogFilter[];
   excludeLogs?: LogFilter[];
+  writeBackEnabled?: boolean;
 }
 ```
 
@@ -101,6 +102,7 @@ export type SnsTransportOptions = {
 - `keyExamineDepth` is the maximum depth level of json objects at which the keys will be examined for `excludeKeys`. The default value is 3.
 - `includeLogs` can be used to filter for logs that need to published and discard the rest. Providing an empty array here has the same effect as not providing a value which is that all logs will be published unless filtered out by `excludeLogs`. Unlike `excludeKeys`, this does not support dot notation for now
 - `excludeLogs` can be used to prevent certain logs from being published whose value at `key` matches the `pattern`. Unlike `excludeKeys`, this does not support dot notation for now
+- `writeBackEnabled`, default is true and works only if the pino optional peer dependency is met and there is a file descriptor present on std out. Any errors encountered during initialization of package or publishing messages are written to std out along with log payload.
 
 ### Nuances
 
