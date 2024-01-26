@@ -20,13 +20,13 @@ export async function transport(opts: SnsTransportOptions) {
     ])
   
     return build(async function (source) {
-      for await (let obj of source) {
+      for await (let log of source) {
         try {
-          if (logFilterer.check(obj)) {
-            await publisher.publish(messageFormatter.formatMessage(obj));
+          if (logFilterer.check(log)) {
+            await publisher.publish(messageFormatter.formatMessage(log));
           }
         } catch (err) {
-          errorHandler.log('Publishing Message Failed', {err, obj});
+          errorHandler.log('Publishing Message Failed', {err, log});
         }
       }
     })
@@ -34,8 +34,8 @@ export async function transport(opts: SnsTransportOptions) {
     errorHandler.log('Transport Initialization Failed', err);
     
     return build(async function (source) {
-      for await (let obj of source) {
-        errorHandler.log('Transport Initialization Failed', {err, obj});
+      for await (let log of source) {
+        errorHandler.log('Transport Initialization Failed', {err, log});
       }
     })
   }
