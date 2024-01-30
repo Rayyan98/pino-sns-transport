@@ -1,35 +1,39 @@
-import { once } from "node:events";
-import { SnsTransportOptions } from "./types";
-import type { SonicBoom } from "sonic-boom";
+import stringify from 'json-stringify-safe';
 
 export class ErrorHandler {
-  errorLogStream?: SonicBoom;
-
-  constructor(private readonly opts: SnsTransportOptions) {}
-
-  async init() {
-    const writeBackEnabled = this.opts.writeBackEnabled ?? true;
-
-    if (writeBackEnabled) {
-      try {
-        const { pino } = await import('pino');
-        const errorLogStream = pino.destination({
-          fd: 1,
-          sync: true,
-        });
-        await once(errorLogStream, 'ready');
-        this.errorLogStream = errorLogStream;
-      } catch (error: any) {
-        // Do nothing. It is what it is.
-      }
-    }
+  private liftErrorProperties(error: any) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      ...error,
+    };
   }
 
-  log(error: string, details: any) {
+  private log(error: string, errorDetails: any, level: 'fatal' | 'error', log?: any) {
     try {
-      this.errorLogStream?.write(JSON.stringify({context: 'pino-sns-transport', error, details}) + '\n');
+      const time = Date.now().valueOf();
+
+      const logInfo = {
+        msg: error,
+        context: 'pino-sns-transport',
+        level,
+        time,
+        error: this.liftErrorProperties(errorDetails),
+        failedLog: log,
+      };
+
+      console.log(stringify(logInfo));
     } catch (error: any) {
       // Do nothing. It is what it is.
     }
+  }
+
+  error(error: string, errorDetails: any, log?: any) {
+    this.log(error, errorDetails, 'error', log);
+  }
+
+  fatal(error: string, errorDetails: any, log?: any) {
+    this.log(error, errorDetails, 'fatal', log);
   }
 }

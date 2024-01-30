@@ -18,5 +18,4 @@ export type SnsTransportOptions = {
   keyExamineDepth?: number;
   includeLogs?: LogFilter[];
   excludeLogs?: LogFilter[];
-  writeBackEnabled?: boolean;
 }

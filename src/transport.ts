@@ -6,8 +6,7 @@ import { LogFilterer } from './log-filter';
 import { ErrorHandler } from './error-handler';
 
 export async function transport(opts: SnsTransportOptions) {
-  const errorHandler = new ErrorHandler(opts);
-  await errorHandler.init();
+  const errorHandler = new ErrorHandler();
 
   try {
     const logFilterer = new LogFilterer(opts);
@@ -26,16 +25,16 @@ export async function transport(opts: SnsTransportOptions) {
             await publisher.publish(messageFormatter.formatMessage(log));
           }
         } catch (err) {
-          errorHandler.log('Publishing Message Failed', {err, log});
+          errorHandler.error('Publishing Message Failed', err, log);
         }
       }
     })
   } catch (err) {
-    errorHandler.log('Transport Initialization Failed', err);
+    errorHandler.fatal('Transport Initialization Failed', err);
     
     return build(async function (source) {
       for await (let log of source) {
-        errorHandler.log('Transport Initialization Failed', {err, log});
+        errorHandler.fatal('Transport Initialization Failed', err, log);
       }
     })
   }
