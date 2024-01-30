@@ -29,7 +29,7 @@
   "author": "rayyan98",
   "license": "ISC",
   "dependencies": {
-    "json-stringify-safe": "^5.0.1",
+    "json-stringify-safe": "^5.0.0",
     "pino-abstract-transport": "^1.1.0"
   },
   "peerDependencies": {
