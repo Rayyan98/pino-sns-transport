@@ -1,4 +1,4 @@
-# pino-sns-transport
+# Pino SNS Transport
 
 [![NPM version](https://img.shields.io/npm/v/pino-sns-transport.svg?style=flat-square)](https://www.npmjs.com/package/pino-sns-transport)
 
