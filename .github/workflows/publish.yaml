@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check branch
+      # Step 1: Ensure branch is master
       - name: Ensure branch is master
         run: |
           if [ "${{ github.ref }}" != "refs/heads/master" ]; then
@@ -41,21 +41,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Step 5: Bump version
-      - name: Bump version
+      # Step 5: Set Git config for version commit
+      - name: Set Git config for version commit
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      # Step 6: Bump version and commit
+      - name: Bump version and commit
         run: npm version ${{ github.event.inputs.version }}
 
-      # Step 6: Push changes to master
+      # Step 7: Push changes to master
       - name: Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git commit -am "Bump version via GitHub Actions: ${{ github.event.inputs.version }}"
           git push origin master
 
-      # Step 7: Publish the package
+      # Step 8: Publish the package
       - name: Publish package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
