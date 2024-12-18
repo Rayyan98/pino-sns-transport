@@ -12,6 +12,10 @@ on:
           - minor
           - major
 
+permissions:
+  contents: write  # Allows push to repository
+  actions: read    # Keeps other default permissions for actions
+
 jobs:
   bump-and-publish:
     runs-on: ubuntu-latest
