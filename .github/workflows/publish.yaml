@@ -1,0 +1,62 @@
+name: Manual Publish Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version bump type (patch, minor, major)'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  bump-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check branch
+      - name: Ensure branch is master
+        run: |
+          if [ "${{ github.ref }}" != "refs/heads/master" ]; then
+            echo "This workflow can only be run from the master branch."
+            exit 1
+          fi
+
+      # Step 2: Checkout the master branch
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 3: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 5: Bump version
+      - name: Bump version
+        run: npm version ${{ github.event.inputs.version }}
+
+      # Step 6: Push changes to master
+      - name: Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git commit -am "Bump version via GitHub Actions: ${{ github.event.inputs.version }}"
+          git push origin master
+
+      # Step 7: Publish the package
+      - name: Publish package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release
